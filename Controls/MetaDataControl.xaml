@@ -1,0 +1,64 @@
+﻿<UserControl x:Class="hitomiDownloader.MetaDataControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:hitomiDownloader"
+             mc:Ignorable="d">
+    <DockPanel>
+        <Image DockPanel.Dock="Left"  Source="{Binding Thumbnail,UpdateSourceTrigger=PropertyChanged}" RenderOptions.BitmapScalingMode="HighQuality" RenderOptions.EdgeMode="Aliased" Width="150" Height="150"/>
+        <StackPanel Orientation="Horizontal">
+            <StackPanel DockPanel.Dock="Right" HorizontalAlignment="Left" Width="1024">
+                <StackPanel Orientation="Horizontal">
+                    <Border Background="Red" CornerRadius="10" Width="100">
+                        <Label Content="{Binding Type}"/>
+                    </Border>
+                    <Label Content="{Binding Title}"/>
+                </StackPanel>
+                <Grid>
+                    <StackPanel HorizontalAlignment="Left">
+                        <Label Content="{Binding Artist}"/>
+                        <Label Content="{Binding Parodies}"/>
+                    </StackPanel>
+                    <StackPanel HorizontalAlignment="Right">
+                        <Label Content="{Binding Language}"/>
+                        <Label Content="{Binding Page,UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                </Grid>
+                <Grid>
+                    <StackPanel>
+                        <Rectangle HorizontalAlignment="Left" Width="20" Height="20">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_tag}" />
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                        <local:TagControl HorizontalAlignment="Left" Width="1024" Grid.Column="1" ItemsSource="{Binding MetadataTag,UpdateSourceTrigger=PropertyChanged}" TagCommand="{Binding TagClick}"/>
+                    </StackPanel>
+                </Grid>
+                <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal">
+                    <Button ToolTip="다운로드" Command="{Binding Download}" Width="50" Height="50" Style="{DynamicResource MetroCircleButtonStyle}">
+                        <Rectangle Width="20" Height="20" Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_download}" />
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                    </Button>
+                    <Button  ToolTip="보기" Command="{Binding OpenImageViewer}" Width="50" Height="50" Style="{DynamicResource MetroCircleButtonStyle}">
+                        <Rectangle Width="20" Height="20" Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_image_multiple}" />
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                    </Button>
+                    <Button ToolTip="주소복사" Command="{Binding GetURL}" Width="50" Height="50" Style="{DynamicResource MetroCircleButtonStyle}">
+                        <Rectangle Width="20" Height="20" Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_link}" />
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+    </DockPanel>
+</UserControl>

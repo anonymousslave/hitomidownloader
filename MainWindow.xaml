@@ -1,0 +1,68 @@
+﻿<Controls:MetroWindow x:Class="hitomiDownloader.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:hitomiDownloader"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        WindowStartupLocation="CenterScreen"
+        SaveWindowPosition="True"
+        mc:Ignorable="d"
+                     SizeToContent="WidthAndHeight"
+        Title="Hitomi Downloader" WindowButtonCommandsOverlayBehavior="Flyouts">
+    <Controls:MetroWindow.RightWindowCommands>
+        <Controls:WindowCommands>
+            <Button Content="캐시업데이트" Command="{Binding UpdateCache}"/>
+            <ToggleButton Content="필터" IsChecked="{Binding IsFiltered}" Cursor="Pen"/>
+            <Button Content="설정저장" Command="{Binding SaveSettings}" />
+        </Controls:WindowCommands>
+    </Controls:MetroWindow.RightWindowCommands>
+    <Controls:MetroWindow.Flyouts>
+        <Controls:FlyoutsControl>
+            <Controls:Flyout Header="필터" Position="Top" IsOpen="{Binding IsFiltered}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Controls:ToggleSwitch OnLabel="Or" OffLabel="And" IsChecked="{Binding Queries.IsJoin}"/>
+                        <Controls:ToggleSwitch OnLabel="Exclude" OffLabel="Include" IsChecked="{Binding Queries.IsExcluded}"/>
+                    </StackPanel>
+                    <TextBox Text="{Binding SearchQuery,UpdateSourceTrigger=PropertyChanged}" Controls:TextBoxHelper.Watermark="검색할 태그 입력" Controls:TextBoxHelper.ClearTextButton="True"/>
+                    <ScrollViewer Height="50">
+                        <local:TagControl ItemsSource="{Binding SearchResults,UpdateSourceTrigger=PropertyChanged}" TagCommand="{Binding AddTag}" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+                    </ScrollViewer>
+                    <Label Content="선택된 태그"/>
+                    <Rectangle Width="20" Height="20">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_tag}" />
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                    <ScrollViewer Height="50">
+                        <local:TagControl Height="50" ItemsSource="{Binding Queries}" TagCommand="{Binding RemoveTag}"/>
+                    </ScrollViewer>
+                </StackPanel>
+            </Controls:Flyout>
+        </Controls:FlyoutsControl>
+    </Controls:MetroWindow.Flyouts>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="100"/>
+        </Grid.RowDefinitions>
+        <ListView Grid.Row="0" MinHeight="300" ItemsSource="{Binding Galleries}" VirtualizingPanel.IsVirtualizing="True" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel IsItemsHost="True"/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+            <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <local:MetaDataControl DataContext="{Binding}"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        <StackPanel VerticalAlignment="Bottom" Grid.Row="1">
+            <local:PaginationControl DataContext="{Binding Galleries}"/>
+        </StackPanel>
+        <local:DownloadQueueControl Grid.Row="2"/>
+    </Grid>
+</Controls:MetroWindow>
